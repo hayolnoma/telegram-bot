@@ -8,7 +8,7 @@ bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, "👋 Xush kelibsiz")
+    bot.send_message(message.chat.id, "👋 Xush kelibsiz!")
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     button = types.KeyboardButton("📱 Kontaktni yuboring")
     markup.add(button)
