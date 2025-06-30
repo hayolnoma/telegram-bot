@@ -6,14 +6,16 @@ ADMIN_ID = 7099831932
 
 bot = telebot.TeleBot(TOKEN)
 
+# Start komanda
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, "👋 Xush kelibsiz!\n\nBotdan foydalanish uchun iltimos kontakt yuboring.")
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    button = types.KeyboardButton("📱 Kontaktni yuborish", request_contact=True)
+    bot.send_message(message.chat.id, "👋 Xush kelibsiz")
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    button = types.KeyboardButton("📱 Kontaktni yuborish")
     markup.add(button)
-    bot.send_message(message.chat.id, "👇 Kontaktni yuborish uchun tugmani bosing:", reply_markup=markup)
+    bot.send_message(message.chat.id, "👇 Kontaktni yuboring", reply_markup=markup)
 
+# Foydalanuvchi kontaktini qabul qilish
 @bot.message_handler(content_types=['contact'])
 def contact_handler(message):
     user = message.contact
@@ -27,69 +29,76 @@ def contact_handler(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.add("🇺🇿 O‘zbek adabiyoti", "🌍 Jahon adabiyoti")
     markup.add("🕋 Islomiy kitoblar", "📈 Top 100 kitoblar")
-    bot.send_message(message.chat.id, "✅ Rahmat! Endi menyudan foydalanishingiz mumkin:", reply_markup=markup)
+    bot.send_message(message.chat.id, "✅ Rahmat! Endi menyulardan tanlang", reply_markup=markup)
 
+# Islomiy kitoblar
 @bot.message_handler(func=lambda m: m.text == "🕋 Islomiy kitoblar")
 def islomic_books_menu(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    markup.add("/tafsiri_hilol", "/jannat_vasfi", "/rizq_baraka", "/istigfor_salovat")
-    markup.add("/baxtli_hayot", "/paygambar_uyida", "/quron_qalblar", "🔙 Ortga")
-    bot.send_message(message.chat.id, "🕌 Islomiy kitoblar komandalarini tanlang:", reply_markup=markup)
+    markup.add("/tafsiri_hilol", "/jannat_vasfi", "/rizq_baraka")
+    markup.add("/baxtli_hayot", "/paygambar_uyida", "/quron_qalblar")
+    bot.send_message(message.chat.id, "🕌 Islomiy kitoblar bo'limi", reply_markup=markup)
 
+# Top 100 kitoblar
 @bot.message_handler(func=lambda m: m.text == "📈 Top 100 kitoblar")
 def top100_menu(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.add("/top100_list", "🔙 Ortga")
-    bot.send_message(message.chat.id, "📈 Top 100 kitoblar ro‘yxati:", reply_markup=markup)
+    bot.send_message(message.chat.id, "📈 Top 100 kitoblar bo'limi", reply_markup=markup)
 
+# Asosiy menyuga qaytish
 @bot.message_handler(func=lambda message: message.text == "🔙 Ortga")
 def go_back_to_main_menu(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.add("🇺🇿 O‘zbek adabiyoti", "🌍 Jahon adabiyoti")
     markup.add("🕋 Islomiy kitoblar", "📈 Top 100 kitoblar")
-    bot.send_message(message.chat.id, "🔙 Asosiy menyuga qaytdingiz:", reply_markup=markup)
+    bot.send_message(message.chat.id, "🔙 Asosiy menyuga qaytdingiz", reply_markup=markup)
 
+# Tafsirlar
 @bot.message_handler(commands=['tafsiri_hilol'])
 def send_tafsir_files(message):
     files = [
-        ("BQACAgIAAxkBAAIEZGhhT-3LusRuv5bVnt07OBxQq7vSAAJeBAACCpAhS_oy_R6wll9BNgQ", "📘 Tafsiri Hilol - 1-juz"),
-        ("BQACAgIAAxkBAAIEYGhhT-2pxKxuuTQumsVp0KP_l_LQAALQAwACtAogSyLG-9q1zrPvNgQ", "📘 Tafsiri Hilol - 2-juz"),
-        ("BQACAgIAAxkBAAIEYmhhT-25L2gFz48YyTwrhtTtwpTSAALRAwACtAogS0rL0RNVgIo5NgQ", "📘 Tafsiri Hilol - 3-juz"),
-        ("BQACAgIAAxkBAAIEY2hhT-18FD6aSW10Vd6TsxMsf-y3AALTAwACtAogS3FbbcxdqK38NgQ", "📘 Tafsiri Hilol - 5-juz"),
-        ("BQACAgIAAxkBAAIEZWhhT-2MlYbnrQgx5In1k4sCVZabAALUAwACtAogSyS1KS-saNZ0NgQ", "📘 Tafsiri Hilol - 6-juz"),
-        ("BQACAgIAAxkBAAIEYWhhT-2qLatqmZAzUjQjutlvg-u6AAK1AANNvlhJkt77CiIxPLM2BA", "📱 Tafsiri Hilol APK (1)"),
-        ("BQACAgUAAxkBAAIEX2hhT-0Nu7GnwB-_O4ynzGpdV1EvAAJHAQAC60eAVPyWEhX4ShJSNgQ", "📱 Tafsiri Hilol APK (2)")
+        ("BQACAgIAAxkBAAIEZGhhT-3LusRuv5bVnt07OBxQq7vSA"),
+        ("BQACAgIAAxkBAAIEYGhhT-2pxKxuuTQumsVp0KP_l_LQA"),
+        ("BQACAgIAAxkBAAIEYmhhT-25L2gFz48YyTwrhtTtwpTSA"),
+        # Yana fayllarni qo‘shish
     ]
-    for file_id, caption in files:
-        bot.send_document(message.chat.id, file_id, caption=caption)
+    for file_id in files:
+        bot.send_document(message.chat.id, file_id)
 
+# Jannat vasfi
 @bot.message_handler(commands=['jannat_vasfi'])
 def send_jannat_vasfi(message):
-    bot.send_document(message.chat.id, "BQACAgIAAxkBAAIEfWhhUTzgOIujTxegSrpkXCD2pGdkAALJBAACTWYwSM_P4xiT9wpINgQ", caption="🌴 Jannat vasfi")
+    bot.send_document(message.chat.id, "BQACAgIAAxkBAAIEZGhhT-3LusRuv5bVnt07OBxQq7vSA")
 
+# Rizq baraka
 @bot.message_handler(commands=['rizq_baraka'])
 def send_rizq_baraka(message):
-    bot.send_document(message.chat.id, "BQACAgIAAxkBAAIEf2hhUUbEB-0QmJFY3JUdVBiepPxwAAJnAwACqAfwSFtF_vXwLl7rNgQ", caption="💰 Keng rizq va baraka omillari")
+    bot.send_document(message.chat.id, "BQACAgIAAxkBAAIEZGhhT-3LusRuv5bVnt07OBxQq7vSA")
 
-@bot.message_handler(commands=['istigfor_salovat'])
-def send_istigfor_salovat(message):
-    bot.send_document(message.chat.id, "BQACAgQAAxkBAAIEgWhhUVcB9yUnf9cAAaXZxz7lUlwIKgACcgkAAnbXeVBoozMqw0wJ1jYE", caption="🕊 Istigfor va Salovotlar")
-
+# Baxtli hayot
 @bot.message_handler(commands=['baxtli_hayot'])
 def send_baxtli_hayot(message):
-    bot.send_document(message.chat.id, "BQACAgIAAxkBAAIEg2hhUVdo5HZMsA1rIYxjIZdsVeQgAAJIAgACpPxQSAh-WOpwtsnrNgQ", caption="🌟 Baxtli hayot sari")
+    bot.send_document(message.chat.id, "BQACAgIAAxkBAAIEZGhhT-3LusRuv5bVnt07OBxQq7vSA")
 
-@bot.message_handler(commands=['paygambar_uyida'])
-def send_paygambar_uyida(message):
-    bot.send_document(message.chat.id, "BQACAgIAAxkBAAIEhGhhUVf8cTl-dWj_JQJAc4G3Gv-6AALRBgAC5Jm4SOFHSLdNL2EwNgQ", caption="🏠 Payg‘ambar uyida bir kun")
-
-@bot.message_handler(commands=['quron_qalblar'])
-def send_quron_qalblar(message):
-    bot.send_document(message.chat.id, "BQACAgIAAxkBAAIEgmhhUVfhd7PXMVKEeok3o5GX33_nAAJZAQACWs0pSDNEENbNsOcONgQ", caption="📖 Qur'on – qalblar shifosi")
-
+# Top 100 kitoblar ro'yxati
 @bot.message_handler(commands=['top100_list'])
 def send_top100_txt(message):
-    bot.send_document(message.chat.id, "BQACAgIAAxkBAAIEiWhhUfd7rTKSMbBdwu_TIri17ZdJAALfAgACb4_QSNDwECbXsp_fNgQ", caption="📋 Top 100 kitob ro‘yxati")
+    bot.send_document(message.chat.id, "BQACAgIAAxkBAAIEZGhhT-3LusRuv5bVnt07OBxQq7vSA")
 
+# Ping xabari (botni sinash)
+@bot.message_handler(commands=['ping'])
+def ping(message):
+    bot.send_message(message.chat.id, "Pong!")
+
+# Adminlarga xabar yuborish
+@bot.message_handler(commands=['admin_ping'])
+def admin_ping(message):
+    if message.chat.id == ADMIN_ID:
+        bot.send_message(message.chat.id, "👋 Salom admin! Bot ishlayapti.")
+    else:
+        bot.send_message(message.chat.id, "Siz admin emassiz.")
+
+# Bot ishga tushdi
 print("🤖 Bot ishga tushdi...")
 bot.infinity_polling()
