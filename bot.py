@@ -6,6 +6,9 @@ ADMIN_ID = 7099831932
 
 bot = telebot.TeleBot(TOKEN)
 
+# Webhookni o'chirish (agar ishlatilsa) va pollingni faollashtirish
+bot.remove_webhook()  # Webhookni o'chiradi
+
 # /start komandasini qo'shish
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -98,9 +101,12 @@ def send_quron_qalblar(message):
 @bot.message_handler(commands=['top100_list'])
 def send_top100_txt(message):
     bot.send_document(message.chat.id, "BQACAgIAAxkBAAIEiWhhUfd7rTKSMbBdwu_TIri17ZdJAALfAgACb4_QSNDwECbXsp_fNgQ", caption="📋 Top 100 kitob ro‘yxati")
+
 # /ping komandasini qo'shish
 @bot.message_handler(commands=['ping'])
 def ping(message):
     bot.send_message(message.chat.id, "Pong! 🏓")
+
+# Pollingni ishga tushurish
 print("🤖 Bot ishga tushdi... Kutyapman...")
 bot.infinity_polling()
